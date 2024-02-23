@@ -1,0 +1,84 @@
+
+Es posible que al aplicar PCA y reducir la dimensionalidad de tus datos estés perdiendo cierta información que era útil para tus modelos de clasificación. 
+Aunque PCA busca conservar la mayor cantidad posible de varianza en los datos, al reducir la dimensionalidad, inevitablemente se pierde algo de información. 
+Esto puede resultar en una pérdida de precisión en tus modelos.
+
+Este conjunto de datos proporciona información sobre clientes de un banco y está destinado a analizar y predecir la fuga de clientes (churn). Aquí hay una explicación de las columnas y su relevancia para el proyecto:
+
+1. **RowNumber**: Este es simplemente un identificador secuencial para cada fila en el conjunto de datos. No aporta información sustancial para el análisis y se puede ignorar durante el modelado.
+
+2. **CustomerId**: Un identificador único para cada cliente. Esto es crucial ya que nos permite rastrear y distinguir a cada cliente en el conjunto de datos.
+
+3. **Surname**: El apellido del cliente. Aunque podría haber cierta información demográfica o cultural asociada con los apellidos, en este contexto no parece tener una influencia directa en la predicción de la fuga de clientes.
+
+4. **CreditScore**: Es una representación numérica de la calificación crediticia del cliente. Este es un factor importante ya que los clientes con calificaciones crediticias más altas pueden tener 
+comportamientos financieros diferentes a los de los clientes con calificaciones más bajas.
+
+5. **Geography**: La ubicación geográfica del cliente. Este atributo podría ser relevante ya que los patrones de comportamiento y los factores socioeconómicos pueden variar según la región geográfica.
+
+6. **Gender**: El género del cliente. Este atributo puede ser relevante para comprender las diferencias en el comportamiento financiero y las tasas de fuga entre hombres y mujeres.
+
+7. **Age**: La edad del cliente. La edad es un factor importante en muchos análisis de comportamiento del cliente, ya que puede influir en las decisiones financieras y en la probabilidad de fuga.
+
+8. **Tenure**: El número de años que el cliente ha estado con el banco. Esto puede ser relevante, ya que los clientes más antiguos pueden tener una mayor lealtad o, alternativamente, pueden estar más inclinados a cambiar de banco después de un cierto período de tiempo.
+
+9. **Balance**: El saldo de la cuenta del cliente. Este atributo puede proporcionar información sobre la salud financiera del cliente y su relación con la probabilidad de fuga.
+
+10. **NumOfProducts**: El número de productos financieros que utiliza el cliente. Este atributo puede indicar el nivel de compromiso del cliente con el banco y su relación con la probabilidad de fuga.
+
+11. **HasCrCard**: Indica si el cliente tiene una tarjeta de crédito o no. Este atributo puede ser relevante para comprender los hábitos de gasto y la relación con la probabilidad de fuga.
+
+12. **IsActiveMember**: Indica si el cliente es un miembro activo o no. Los clientes activos pueden ser menos propensos a la fuga, por lo que este atributo puede ser un buen predictor.
+
+13. **EstimatedSalary**: El salario anual estimado del cliente. Este atributo puede proporcionar información sobre la capacidad financiera del cliente y su relación con la probabilidad de fuga.
+
+14. **Exited**: Esta es la variable objetivo que indica si el cliente ha abandonado o no el banco (churn). Es lo que intentaremos predecir en nuestro modelo.
+
+
+
+Para evaluar el rendimiento de un modelo de predicción de churn, existen varias métricas que pueden ser importantes dependiendo del contexto específico del problema y de las necesidades del negocio. 
+Aquí te presento algunas de las métricas más comunes:
+
+1. **Precisión (Accuracy)**:
+   - Es la proporción de predicciones correctas (verdaderos positivos y verdaderos negativos) respecto al total de predicciones.
+   - Fórmula: (TP + TN) / (TP + TN + FP + FN)
+   - Ejemplo con tus datos:
+     - Supongamos que tienes un modelo que predice que 800 clientes van a churn y 200 clientes no van a churn. De esos, el modelo acierta en 750 casos de churn y 150 casos de no churn. 
+     Entonces la precisión sería (750 + 150) / (800 + 200) = 900 / 1000 = 0.9 o 90%.
+
+2. **Recall (Sensibilidad o Tasa de verdaderos positivos)**:
+   - Es la proporción de casos positivos (churn) que fueron correctamente identificados por el modelo.
+   - Fórmula: TP / (TP + FN)
+   - Ejemplo con tus datos:
+     - Si de todos los clientes que realmente churnaron (digamos que fueron 1000), tu modelo solo predijo correctamente 750 de ellos, entonces el recall sería 750 / 1000 = 0.75 o 75%.
+
+3. **Precisión (Precision)**:
+   - Es la proporción de predicciones positivas (churn) que fueron realmente positivas.
+   - Fórmula: TP / (TP + FP)
+   - Ejemplo con tus datos:
+     - Si de todos los clientes que tu modelo predijo que churnarían (digamos que fueron 1000), solo 750 realmente churnaron, entonces la precisión sería 750 / 1000 = 0.75 o 75%.
+
+Aunque ambas métricas están relacionadas con la capacidad del modelo para clasificar correctamente los casos positivos, se calculan de manera diferente y enfatizan aspectos diferentes del rendimiento del modelo.
+
+Aquí hay una explicación más detallada de cada una:
+
+**Recall (Sensibilidad o Tasa de verdaderos positivos)**:
+- El recall mide la proporción de casos positivos (churn, en este caso) que fueron correctamente identificados por el modelo.
+- Es decir, el recall responde a la pregunta: "De todos los casos de churn reales, ¿qué proporción de ellos fue identificada correctamente por el modelo?"
+- La fórmula del recall es TP / (TP + FN), donde TP representa los verdaderos positivos (casos positivos correctamente identificados) y FN representa los falsos negativos (casos positivos que el modelo clasificó incorrectamente como negativos).
+- Un recall alto indica que el modelo es capaz de identificar la mayoría de los casos positivos, lo que es importante cuando es crucial capturar la mayoría de los casos positivos, incluso a costa de cometer algunos falsos positivos.
+
+**Precisión (Precision)**:
+- La precisión mide la proporción de predicciones positivas (churn, en este caso) que fueron realmente positivas.
+- Es decir, la precisión responde a la pregunta: "De todas las predicciones positivas realizadas por el modelo, ¿qué proporción de ellas fue realmente correcta?"
+- La fórmula de precisión es TP / (TP + FP), donde TP representa los verdaderos positivos (casos positivos correctamente identificados) y FP representa los falsos positivos (casos negativos que el modelo clasificó incorrectamente como positivos).
+- Una precisión alta indica que el modelo es preciso en sus predicciones positivas, lo que significa que cuando predice un caso como positivo, es probable que sea correcto.
+
+
+Las agencias de crédito utilizan diversos factores para calcular el puntaje crediticio de un individuo, como su historial de pagos, la cantidad de deudas pendientes, la duración del historial crediticio, 
+el tipo de crédito utilizado y la cantidad de solicitudes recientes de crédito. Este puntaje es utilizado por prestamistas, como bancos y compañías de tarjetas de crédito, para evaluar el riesgo de otorgar crédito a 
+una persona y determinar las tasas de interés y los términos del préstamo.
+En resumen, el puntaje crediticio es una herramienta importante que ayuda a los prestamistas a tomar decisiones informadas sobre la concesión de crédito, mientras que para los consumidores, mantener un buen puntaje 
+crediticio puede facilitar el acceso a préstamos y otros productos financieros en condiciones favorables.
+Sí, generalmente, a mayor puntaje crediticio, mejor. Un puntaje crediticio más alto indica que una persona tiene un historial crediticio sólido y 
+es más probable que cumpla con sus obligaciones financieras.
