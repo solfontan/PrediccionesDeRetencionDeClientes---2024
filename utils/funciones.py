@@ -152,7 +152,7 @@ def BaseLine(x_train, y_train, cv: int, metricas_cross_validate: list):
             "4":  GradientBoostingClassifier(),
             "5":  ExtraTreeClassifier(),
             "6":  DecisionTreeClassifier(),
-            "7":  CatBoostClassifier(),
+            "7":  CatBoostClassifier(silent=True),
             "8":  lgb.LGBMClassifier(verbosity= -1),
             "9":  xgb.XGBClassifier(),
             "10": KNeighborsClassifier(),
