@@ -5,6 +5,14 @@ import numpy as np
 from scipy.stats import kurtosis, skew
 
 def cardinalidad(df: pd.DataFrame):
+    """Funciòn cardinalidad
+
+    Args:
+        df (pd.DataFrame): DataFrame
+
+    Returns:
+        df (pd.DataFrame) : incluye -> valores únicos, la cardinalidad, el tipo de dato y por último un input que deberá rellenarse de forma manual para calificar nuestro dato.
+    """
     cardi = pd.DataFrame(columns=['cardinalidad', 'porcentaje_cardinalidad', 'tipo_de_dato', 'valores_unicos', 'tipo_de_variable'],
                          index=df.columns)
 
@@ -19,7 +27,16 @@ def cardinalidad(df: pd.DataFrame):
 
     return cardi
 
-def extended_describe(column, df):
+def extended_describe(column : str, df : pd.DataFrame) -> pd.DataFrame:
+    """ DataFrame con medidas de tendencias central y de distribución incluído la kurtosis y asimetría.
+
+    Args:
+        column (str)
+        df (pd.DataFrame)
+
+    Returns:
+        DataFrame
+    """
     describe_df = df[column].describe()
     # Crear un nuevo DataFrame con las estadísticas extendidas
     extended_describe_df = pd.DataFrame({
@@ -52,10 +69,22 @@ def extended_describe(column, df):
     return extended_describe_df
 
 class CategoricalAnalysis:
+    """
+    Análisis categórico de Variables, con el fin de dar un pantallazo más amplio.
+    
+    """
     def __init__(self, df):
         self.df = df
         
-    def plot_top_categories(self, title, column_name, labely, n=5):
+    def plot_top_categories(self, title : str, column_name : str, labely : str, n=5):
+        """Incluyen dos gráficos, uno de brras con máximo de 5 valores y los mismos dentro de un gráfico de pie.
+
+        Args:
+            title (str)
+            column_name (str)
+            labely (str): label del eje y.
+            n (int, optional): Defaults to 5.
+        """
         # Obtener recuento de valores y nombres de las primeras n categorías
         top_categories = self.df[column_name].value_counts().nlargest(n)
         top_category_names = top_categories.index.tolist()
@@ -101,7 +130,20 @@ class CategoricalAnalysis:
             plt.show()
 
 
-    def plot_distribution(self, title, column_name, alpha, color, cant_bins, rotation):
+    def plot_distribution(self, title : str, column_name: str, alpha : float, color: str, cant_bins : int, rotation : int):
+        """histplot con estilo uniforme al igual que la función plot_top_categories
+
+        Args:
+            title (str)
+            column_name (str)
+            alpha (float): entre 0 y 1.
+            color (str)
+            cant_bins (int)
+            rotation (int): de labels sobre el eje X.
+
+        Returns:
+            Gráficos
+        """
         plt.rcParams['axes.labelpad'] = 5  # Ajustar el espaciado entre las etiquetas y los ejes
         plt.rcParams['xtick.bottom'] = True  # Colocar las etiquetas del eje X en la parte inferior
         plt.rcParams['ytick.left'] = True  # Colocar las etiquetas del eje Y en la izquierda
@@ -143,6 +185,17 @@ import warnings
 warnings.filterwarnings('ignore')
 
 def BaseLine(x_train, y_train, cv: int, metricas_cross_validate: list):
+    """ Crea la validación cruzada para los modelos que deseemos.
+
+    Args:
+        x_train (_type_): _description_
+        y_train (_type_): _description_
+        cv (int): folds.
+        metricas_cross_validate (list): solo Clasificación.
+
+    Returns:
+        df: DtaFrame con las métricas obtenidas de la validación cruzada.
+    """
     try:
         # Definir modelos disponibles
         modelos = {
@@ -188,11 +241,16 @@ def BaseLine(x_train, y_train, cv: int, metricas_cross_validate: list):
         nombres_descriptivos = ['Logistic Regression', 'Random Forest', 'ADABoosting', 'Gradient Boosting', 'Extra Trees', 'Decision Tree', 'CatBoost', 'LGBM', 'XGBoost', 'KNN', 'SVC', 'HistGradientBoost']
         diccionario_nombres = {clave: nombres_descriptivos[int(clave) - 1] for clave in modelos_seleccionados}
 
-        # Crear DataFrame con nombres descriptivos
-        resultados_df = pd.DataFrame(resultados_dict.values(), index=[diccionario_nombres.get(clave.split('_')[0]) + "_" + clave.split('_')[1] for clave in resultados_dict.keys()], columns=["Score"])
-        resultados_df.index.name = "Modelo"
+        index = [diccionario_nombres.get(clave.split('_')[0]) for clave in resultados_dict.keys()]
+        metrica = [clave.split('_')[1] for clave in resultados_dict.keys()]
 
-        return resultados_df.reset_index().sort_values(by="Modelo", ascending=False)
+       # Crear DataFrame con nombres descriptivos y métricas como columnas
+        resultados_df = pd.DataFrame({'Modelo': index, 'Metrica': metrica, 'Score': resultados_dict.values()})
+
+        # Crear una tabla pivote para tener las métricas como columnas
+        resultados_pivot = resultados_df.pivot(index='Modelo', columns='Metrica', values='Score')
+
+        return resultados_pivot
 
     except Exception as e:
         print('Surgió un error:', e)
