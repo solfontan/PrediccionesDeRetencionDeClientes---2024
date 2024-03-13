@@ -6,9 +6,6 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-### Tratamiento de datos
-from utils.funciones import extended_describe
-
 ### Machine Learning
 # Preparación de datos 
 from sklearn.model_selection import train_test_split
@@ -19,11 +16,10 @@ from imblearn.over_sampling import SMOTE, ADASYN, SMOTENC
 from sklearn.decomposition import PCA
 
 # Modelos
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import  RandomForestClassifier
 from catboost import CatBoostClassifier
 import lightgbm as lgb
 from sklearn.metrics import  classification_report, precision_recall_curve, f1_score
+import pickle
 
 # Ignorar warnings
 import warnings
@@ -41,10 +37,10 @@ df_germany = df[df['Geography'] == 'Germany']
 # ---- FRANCE------------------------------------------------------------------------------
 
 # Definir las variables X e y
-X = df.drop(columns=['Exited']) 
-y = df['Exited']
+X = df_france.drop(columns=['Exited']) 
+y = df_france['Exited']
 
-numeric_features = ['CreditScore', 'Age', 'Tenure', 'NumOfProducts', 'Balance', 'EstimatedSalary']
+numeric_features = ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts',  'EstimatedSalary']
 categ = ['Gender']
 
 # Definir transformadores para características numéricas y categóricas
@@ -64,8 +60,7 @@ X_processed = pipeline.fit_transform(X)
 
 # Crear DataFrame con los datos procesados y los nombres de las columnas
 processed_df = pd.DataFrame(X_processed, columns=numeric_features)
-concatenated_series  = pd.concat((processed_df, X[[ 'HasCrCard', 'IsActiveMember', 'Gender']]), axis=1)
-concatenated_series
+concatenated_series  = pd.concat((processed_df, X[[ 'HasCrCard', 'IsActiveMember', 'Gender']].reset_index(drop=True)), axis=1)
 
 # Dividir los datos en conjuntos de entrenamiento y prueba
 X_train, X_test, y_train, y_test = train_test_split(concatenated_series, y, test_size=0.2, random_state=24)
@@ -98,10 +93,19 @@ optimal_threshold = thresholds[best_threshold_index]
 # Aplicar el umbral óptimo para convertir las probabilidades de predicción en etiquetas de clase
 y_pred_optimal = (y_probs >= optimal_threshold).astype(int)
 
-
+# Mostrar el reporte de clasificación
 print("Reporte de clasificación para Francia:")
 print(classification_report(y_test, y_pred_optimal))
 
+
+print(concatenated_series.head(2))
+
+# Guardar el modelo y el umbral óptimo en un diccionario
+model_data = {'model': france_model, 'threshold': optimal_threshold}
+
+# Guardar el modelo y el umbral óptimo en un archivo
+with open('app/france.pkl', 'wb') as f:
+    pickle.dump(model_data, f)  
 
 # ------ Spain ----------------------------------------------------------------------------------------------------
 
@@ -157,13 +161,23 @@ f1_scores = 2 * (precision * recall) / (precision + recall)
 best_threshold_index = f1_scores.argmax()
 
 # Seleccionar el umbral óptimo
-optimal_threshold = thresholds[best_threshold_index]
+optimal_threshold_spain = thresholds[best_threshold_index]
 
 # Aplicar el umbral óptimo para convertir las probabilidades de predicción en etiquetas de clase
-y_pred_optimal = (y_probs >= optimal_threshold).astype(int)
+y_pred_optimal = (y_probs >= optimal_threshold_spain).astype(int)
 
 print("Reporte de clasificación para Spain:")
 print(classification_report(y_test, y_pred_optimal))
+
+print(concatenated_series_spain.head(2))
+
+# Guardar el modelo y el umbral óptimo en un diccionario
+model_data_spain = {'model': model_spain, 'threshold': optimal_threshold_spain}
+
+# Guardar el modelo y el umbral óptimo en un archivo
+with open('app/spain.pkl', 'wb') as f:
+    pickle.dump(model_data_spain, f)  
+    
 
 # ------------ Germany ---------------------------------------------------------------------------------------------
 
@@ -217,10 +231,19 @@ f1_scores = 2 * (precision * recall) / (precision + recall)
 best_threshold_index = f1_scores.argmax()
 
 # Seleccionar el umbral óptimo
-optimal_threshold = thresholds[best_threshold_index]
+optimal_threshold_german = thresholds[best_threshold_index]
 
 # Aplicar el umbral óptimo para convertir las probabilidades de predicción en etiquetas de clase
-y_pred_optimal = (y_probs >= optimal_threshold).astype(int)
+y_pred_optimal = (y_probs >= optimal_threshold_german).astype(int)
 
 print("Reporte de clasificación para Germany:")
 print(classification_report(y_test, y_pred_optimal))
+
+print(concatenated_series_germany.head(2))
+
+# Guardar el modelo y el umbral óptimo en un diccionario
+model_data_german = {'model': model_german, 'threshold': optimal_threshold_german}
+
+# Guardar el modelo y el umbral óptimo en un archivo
+with open('app/german.pkl', 'wb') as f:
+    pickle.dump(model_data_german, f)  
