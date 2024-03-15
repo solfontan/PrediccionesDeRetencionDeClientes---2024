@@ -37,6 +37,7 @@ def extended_describe(column : str, df : pd.DataFrame) -> pd.DataFrame:
     Returns:
         DataFrame
     """
+
     describe_df = df[column].describe()
     # Crear un nuevo DataFrame con las estadísticas extendidas
     extended_describe_df = pd.DataFrame({
@@ -91,7 +92,7 @@ class CategoricalAnalysis:
         top_category_counts = top_categories.values.tolist()
         
         # Colores para los gráficos
-        branch_col = ['navy', 'crimson', 'forestgreen', 'orange', 'purple']
+        branch_col = ['navy', 'crimson', 'forestgreen', 'orange', 'purple', 'darkblue', 'darkred', 'darkgreen', 'yellow', 'darkviolet']
         
         # Crear gráficos
         with plt.style.context('fivethirtyeight'):
@@ -162,11 +163,11 @@ class CategoricalAnalysis:
             plt.title(title, loc='center', fontsize=12)
             plt.show()
 
-        answer_df = input('¿Deseas un datafram con las medidas centrales, de distribución y asimetría del gráfico? : si / no')
+        answer_df = input('¿Deseas un dataframe con las medidas centrales, de distribución y asimetría del gráfico? : si / no')
         
         if answer_df.lower() == 'si':
-            return extended_describe(self.df, column_name)
-            
+            return extended_describe(column_name, self.df)
+           
 
 # Preparación de datos 
 from sklearn.model_selection import train_test_split, cross_validate
