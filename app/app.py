@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import pandas as pd
 import pickle
 
@@ -29,14 +29,16 @@ loaded_german_model = loaded_model_data_german['model']
 loaded_optimal_threshold_german = loaded_model_data_german['threshold']
 
 
+predicted_data = None
+
 # Definir la ruta para la página de inicio
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/user', methods=['GET', 'POST'])
 def modelo():
-    print("Accediendo a la ruta '/index'")
+    print("Accediendo a la ruta '/user'")
     if request.method == 'POST':
         # Obtener los datos del formulario
         data = {
@@ -102,18 +104,28 @@ def modelo():
         print(y_pred_optimal_loaded)
         
         if y_pred_optimal_loaded[0] == 1:
-            return redirect(url_for('alerta_abandono'))
-        else:
-            return redirect(url_for('home'))
 
-    return render_template('index.html')
+            predicted_data = input_data
+            
+            return render_template('user.html', prediction=1)
 
+    return render_template('user.html')
 
-@app.route('/alerta_abandono')  # Cambia '/bank_page' a '/alerta_abandono'
-def alerta_abandono():
-    # Renderiza la página de alerta de abandono
-    return render_template('bank_page.html')
+@app.route('/bank_page', methods=['GET', 'POST'])
+def bank_data():
+    data = {
+        'credit_score': 750,
+        'age': 35,
+        'tenure': 8,
+        'balance': 5000,
+        'num_of_products': 2,
+        'estimated_salary': 75000,
+        'has_cr_card': True,
+        'is_active': True,
+        'gender': 'Male'
+    }
 
+    return render_template('bank_page.html', data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)

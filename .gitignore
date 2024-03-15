@@ -1,0 +1,44 @@
+# Ignorar archivos de caché y compilados
+__pycache__/
+*.pyc
+
+# Ignorar archivos de entorno virtual
+venv/
+.env/
+
+# Ignorar archivos de registro
+*.log
+
+# Ignorar archivos de configuración local
+*.ini
+*.cfg
+
+# Ignorar archivos de dependencias y paquetes
+*.egg-info/
+dist/
+build/
+
+# Ignorar archivos generados por IDEs y editores de texto
+.idea/
+.vscode/
+
+# Ignorar archivos de respaldo
+*~
+
+# Ignorar archivos de registros de pruebas
+pytest_cache/
+
+# Ignorar archivos de salida y resultados de pruebas
+coverage*/
+
+# Ignorar archivos de migraciones de bases de datos Django
+/migrations/
+
+# Ignorar archivos de entorno de desarrollo
+*.env
+
+# Ignorar archivos de configuración sensible
+secrets.ini
+
+# Ignorar la carpeta "prof"
+prof/
