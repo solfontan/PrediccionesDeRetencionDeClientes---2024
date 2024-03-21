@@ -141,29 +141,30 @@ if uploaded_file:
     st.dataframe(df, use_container_width=True)
 
     # Inicializar contadores para cada país
-    churn_count = {'France': 0, 'Spain': 0, 'Germany': 0}
-    non_churn_count = {'France': 0, 'Spain': 0, 'Germany': 0}
+    churn_counts = {}
+    non_churn_counts = {}
 
     # Dividir los datos por país y aplicar transformaciones
     for pais in df['Geography'].unique():
-        st.subheader(f"Transformaciones para {pais}")
         pais_df = df[df['Geography'] == pais].copy()
 
         if pais.lower() == 'france':
             # Aplicar transformaciones para Francia
-            pais_df['CreditCardOwnerTenure'] = pais_df['has_cr_card'] * pais_df['Age']
-            pais_df.drop(columns=['HasCrCard', 'Geography'], inplace=True)
+            pais_df['CreditCardOwnerTenure'] = pais_df['HasCrCard'] * pais_df['Age']
+            pais_df.drop(columns=['HasCrCard', 'Geography', 'EstimatedSalary'], inplace=True)
             
             columns_ordered = ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'CreditCardOwnerTenure', 'IsActiveMember', 'Gender']
             pais_df = pais_df.reindex(columns=columns_ordered)
         
         elif pais.lower() == 'spain': 
-            pais_df['Gender'] = pais_df['Gender'].map(lambda x: 1 if x == 'Male' else 0)
-            pais_df.drop(columns=['HasCrCard', 'Geography'], inplace=True)
+            # Convertir género a valores numéricos (1 para Male, 0 para Female)
+            pais_df['Gender'] = pais_df['Gender'].map(lambda x: 1 if x == "Male" else 0)
+            pais_df.drop(columns=['HasCrCard', 'Geography', 'EstimatedSalary'], inplace=True)
             
         elif pais.lower() == 'germany':
+            # Aplicar transformaciones para Alemania
             pais_df['Balance_Tenure_Ratio'] = pais_df['Balance'] / (pais_df['Tenure'] + 1e-6)
-            pais_df.drop(columns=['HasCrCard', 'Geography'], inplace=True)
+            pais_df.drop(columns=['HasCrCard', 'Geography', 'EstimatedSalary'], inplace=True)
                     
             columns_ordered = ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts','Balance_Tenure_Ratio', 'IsActiveMember', 'Gender']
             pais_df = pais_df.reindex(columns=columns_ordered)
@@ -171,35 +172,30 @@ if uploaded_file:
         # Obtener modelo correspondiente al país
         modelo_pais = modelos[pais.lower()]
         
-        # Realizar predicción y actualizar contadores para cada registro en el país actual
-        for pais in df['Geography'].unique():
-            st.subheader(f"Transformaciones para {pais}")
-            pais_df = df[df['Geography'] == pais].copy()
+        # Realizar predicciones y actualizar contadores
+        churn_count = 0
+        non_churn_count = 0
 
-            # Código para transformaciones según el país
+        for index, row in pais_df.iterrows():
+            prediction = predecir(modelo_pais, [row])
+            if prediction == 1:
+                churn_count += 1
+            else:
+                non_churn_count += 1
+        
+        churn_counts[pais] = churn_count
+        non_churn_counts[pais] = non_churn_count
 
-            # Inicializar contadores para cada país
-            churn_count = 0
-            non_churn_count = 0
+    for pais, churn_count in churn_counts.items():
+        if churn_count > 0:
+            if st.sidebar.button(f'{pais}: {churn_count} Ver registros de clientes en riesgo', key=f'{pais}_churn_button'):
+                st.subheader(f'Registros en riesgo de churn en {pais}')
+                churn_df = df[df['Geography'] == pais]
+                st.dataframe(churn_df)
 
-            # Dividir los datos por país y aplicar transformaciones
-            for index, row in pais_df.iterrows():
-                prediction = predecir(modelo_pais, [row])
-                if prediction == 1:
-                    churn_count += 1
-                else:
-                    non_churn_count += 1
-
-            # Mostrar los botones de notificación para el país actual
-            if churn_count > 0:
-                button_color = 'red'
-                st.sidebar.button(f'{pais}: {churn_count} clientes en riesgo de churn')
-            if non_churn_count > 0:
-                button_color = 'green'
-                st.sidebar.button(f'{pais}: {non_churn_count} clientes no están en riesgo de churn', style=f'background-color:{button_color}')
-
-            # Mostrar los registros de personas en riesgo de churn cuando se hace clic en el botón correspondiente
-            if churn_count > 0:
-                if st.sidebar.button(f'Ver registros de clientes en riesgo de churn en {pais}'):
-                    st.write(pais_df[prediction == 1])
-
+    
+    for pais, non_churn_count in non_churn_counts.items():
+        if non_churn_count > 0:
+            button_color = 'green'
+            st.sidebar.markdown(f'<button style="background-color:{button_color}; color:white">{pais}: {non_churn_count} clientes no están en riesgo de churn</button>',
+                        unsafe_allow_html=True)
