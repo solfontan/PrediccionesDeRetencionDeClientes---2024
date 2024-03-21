@@ -97,7 +97,7 @@ def prediccion():
         }, inplace=True)
         
         user_df.drop(columns='country', inplace=True)
-        print(user_df)
+        print(user_df.columns)
         prediction = predecir(modelo, user_df)
         print( prediction)
         
