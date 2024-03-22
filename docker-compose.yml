@@ -1,0 +1,7 @@
+version: "3.9"
+
+services:
+  churn_app:
+    build: .
+    ports:
+      - "2424:2424"
