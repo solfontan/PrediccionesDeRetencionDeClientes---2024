@@ -9,33 +9,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 </head>
-<body>
+<body class='bg-primary'>
     <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <h4>Datos del Usuario</h4>
-                <table border="1">
+                <h4 class="text-light">Datos del usuario en riesgo de abandono.</h4>
+                <table border="1" class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Datos</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Datos</th>
+                            <th scope="col">Probabilidad</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for usuario in datos_usuario_spain %}
                         <tr>
-                            <td>{{ usuario.id }}</td>
+                            <td>{{ usuario['id'] }}</td>
                             <td>
                                 <ul>
-                                    {% for key, value in usuario.datos_usuario_spain.items() %}
+                                    {% for key, value in usuario['datos_usuario_spain'].items() %}
                                     <li>{{ key }}: {{ value }}</li>
                                     {% endfor %}
                                 </ul>
                             </td>
+                            <td>{{ usuario['pro_s'] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                
             </div>
         </div>
     </div>    
