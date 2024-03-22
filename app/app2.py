@@ -1,5 +1,5 @@
 import pickle
-from flask import Flask, render_template, request,session, redirect, url_for
+from flask import Flask, render_template, request,session, redirect, flash, url_for
 import pandas as pd
 import numpy as np
 from io import StringIO
@@ -38,9 +38,18 @@ def leer_csv(df):
 
 @app.route('/procesar',  methods=['POST'])
 def procesar():
-    archivo_csv = request.files['csv_file']
-    df = pd.read_csv(archivo_csv, sep=';')
-    tabla_html = leer_csv(df)
+    try:
+        archivo_csv = request.files['csv_file']
+    except KeyError:
+        flash('Por favor, sube un archivo CSV.', 'error')
+        return redirect('/')
+
+    try:
+        df = pd.read_csv(archivo_csv, sep=';')
+        tabla_html = leer_csv(df)
+    except pd.errors.EmptyDataError:
+        flash('El archivo CSV está vacío o no contiene datos.', 'error')
+        return render_template('archivotest.html', alert='El archivo CSV está vacío o no contiene datos.')
         
     # Realizar la predicción para Francia
     df_france = df[df['Geography'] == 'France']

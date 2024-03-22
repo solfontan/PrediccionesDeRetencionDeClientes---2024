@@ -6,7 +6,7 @@ RUN pip install -r requirements.txt
 
 RUN mkdir -p app
 
-COPY ./app app2.py
+COPY ./app app2
 
 WORKDIR app2
 
