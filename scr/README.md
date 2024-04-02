@@ -1,10 +1,10 @@
 # ¡Bienvenido al Proyecto de Análisis de Datos Bancarios! 🚀
 
-¡Hola! Este es nuestro increíble proyecto donde exploramos datos bancarios y tratamos de predecir si los clientes se quedarán o se irán. 😎
+¡Hola! Este es nuestro increíble proyecto donde exploramos datos bancarios y trataremos de predecir si los clientes se quedarán o se irán. 😎
 
 ## 📊 ¡Análisis Exploratorio de Datos (EDA)! 📊
 
-En el archivo `analisis_exploratorio.ipynb`, nos aventuramos en el mundo de los datos bancarios y planteamos tres hipótesis super emocionantes:
+En el archivo `analisis_exploratorio.ipynb`, planteamos tres hipótesis:
 
 ### 💼 **Relación entre el Abandono y la Ubicación Geográfica:**
 
@@ -20,7 +20,7 @@ En el archivo `analisis_exploratorio.ipynb`, nos aventuramos en el mundo de los 
 
 ## 🤖 ¡Modelado de Machine Learning! 🧠
 
-En el archivo `modelado_ml.ipynb`, utilizamos la magia de los algoritmos para predecir el futuro (bueno, al menos el futuro de los clientes bancarios). 😉
+En el archivo `machine_learning.ipynb`, utilizamos la magia de los algoritmos para predecir el futuro (bueno, al menos el futuro de los clientes bancarios). 😉
 
 Para asegurarte de que todo funcione correctamente, instala todas las bibliotecas necesarias con:
 
@@ -28,4 +28,4 @@ Para asegurarte de que todo funcione correctamente, instala todas las biblioteca
 
 ¿Quieres ver un resumen rápido de todo el proyecto? ¡Dirígete al notebook `ProjectResumen.ipynb` para obtener un pantallazo! 📓
 
-¡Gracias por venir a nuestra fiesta de datos! 🎉
+¡Gracias! 🎉🚀
