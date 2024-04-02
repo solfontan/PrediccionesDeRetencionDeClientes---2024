@@ -4,7 +4,7 @@
 
 ## La Misión:
 
-En un mundo donde los clientes son tan cambiantes como el clima, retenerlos es como una carrera de obstáculos. Las predicciones de churn son tu mejor arma para predecir quién está a punto de salir corriendo y tomar medidas. 🏃‍♂️🔮
+En un mundo donde los clientes son tan cambiantes como el clima, retenerlos es como una carrera de obstáculos. Las predicciones de churn te ayudaran a predecir quién está a punto de salir corriendo y tomar medidas. 🏃‍♂️🔮
 
 ## Por Qué Son Cruciales:
 
@@ -40,8 +40,6 @@ La precisión es nuestra mejor amiga. Cuanto más precisa sea tu predicción, m�
 
 - **Modelos Supervisados:** Utilizamos modelos como Logistic Regression, Random Forest y Máquinas de Vectores de Soporte (SVM) para predecir la probabilidad de abandono con precisión.
 
-- **Modelos No Supervisados:** Exploraremos el misterioso mundo de K-Means y PCA para agrupar clientes y encontrar patrones ocultos en los datos.
-
-¡Con estas poderosas herramientas, estarás listo para embarcarte en una aventura emocionante y exitosa en el mundo de la retención de clientes! 🌟🎉
+- **Modelos No Supervisados:** Exploraremos el misterioso mundo de K-Means para agrupar clientes y encontrar patrones ocultos en los datos.
 
 ¡Y eso es todo! Con esta guía rápida, estás listo para enfrentarte al desafío de la retención de clientes con confianza y estilo. ¡A por ellos! 🚀🎉
